@@ -1,22 +1,3 @@
-
-/*
-
-OMG V2!
-
-Slide gets up down left right
-Specify individual transitions by passing multiple transition objects to the transition option in an array!
-Methods! to, next, previous, pause, play, playPause
-Bind to events! onNext, onPrevious, onPlay, onPause, onTo, onTransition, onTransitionComplete, onInit, onInitComplete, onInitEvents, onStartTimer, onClearTimer
-Added waitForTransition option
-If waitForTransition is false the behaviour for rapidly cycling through slides has improved by finishing the transitions immediatly
-Customize the pager, thumber and slideshow list elements. Use ul > li's or straight divs, whatever floats your boat.
-
-
-
-Want to do:
-Plugins! Easily make plugins that tie directly into the uberbox events
-*/
-
 (function( $ ){
 
     var uberbox = function (element, options) {
