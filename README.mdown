@@ -22,4 +22,4 @@ The goal of uberbox is to work out of the box. Just give uberbox an element cont
 
 #### What's with the height?
 
-Due to the acceptance of any content, uberbox currently requires that a height be passed, or set via CSS.
+Due to the acceptance of any content, uberbox currently requires that a height be passed, or set via CSS. This requirement will be dropped in a future release.
