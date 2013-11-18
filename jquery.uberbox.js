@@ -318,7 +318,6 @@
             fx: "fade",
             speed: "slow"
         },
-        source: null,
         waitForTransition: false,
         nextButton: "",
         previousButton: "",

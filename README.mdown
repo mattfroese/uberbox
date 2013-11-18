@@ -2,9 +2,7 @@
 
 Uberbox is a light-weight, feature packed slideshow plugin built ontop of jquery, created and maintained by [Matt Froese](http://twitter.com/mattfroese)
 
-## Documentation
-
-### Simplest Example
+## Simplest Example
 
 The goal of uberbox is to work out of the box. Just give uberbox an element containing list, and it can manage the rest.
 
@@ -23,3 +21,40 @@ The goal of uberbox is to work out of the box. Just give uberbox an element cont
 #### What's with the height?
 
 Due to the acceptance of any content, uberbox currently requires that a height be passed, or set via CSS. This requirement will be dropped in a future release.
+
+## Documentation
+
+### Options
+
+- **width**: Give uberbox a width in px or %
+- **height**: Give uberbox a width in px or %
+- **startDelay**(ms): Add a start delay to your slideshow
+- **startSlide**: Start on a specific slide or pass "random" as a string for a random start slide
+- **order**: "sequence" or "random"
+- **speed**(ms): How long a slide will display before transitioning,
+- **transition**: Transition details, sub-items are fx, speed and direction depending on transition type.
+
+	transition: {
+	    fx: "fade",
+	    speed: "slow"
+	}
+
+- **waitForTransition**(bool): If a slide change is triggered during a transition use this to determine if uberbox should wait for the current transition to complete
+- **nextButton**: Give an element to use as a next button
+- **previousButton**: Give an element to use as a previous button
+- **playPauseButton**: Give an element to use as a play/pause button
+- **pager**: Give a list element to use as a pager
+- **thumber**: Give a list element to display thumbnails. You can specify thumbnails by adding data-thumb to each slide li
+- **auto**(bool): Auto-advance, or manual
+- **pauseOnHover**(bool): Uberbox will pause when you hover a slide
+- **containerElement**(Default ul): Change the container element uberbox will look for
+- **slideElement**(Default li): Change the item element for each slide item
+- **pagerItemElement**(Default li): Change the item element for each pager item
+- **thumberItemElement**(Default li): Change the item element for each thumb item
+- **source**: Give uberbox a json url and it will fetch the slides dynamicaly
+	
+	source: {
+		url: "/path/to/json"
+	}
+
+### Methods
