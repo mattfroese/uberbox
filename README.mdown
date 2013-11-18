@@ -1,9 +1,25 @@
-Ramblings while I organize this repo
+# Uberbox
 
-Slide gets up down left right
-Specify individual transitions by passing multiple transition objects to the transition option in an array!
-Methods! to, next, previous, pause, play, playPause
-Bind to events! onNext, onPrevious, onPlay, onPause, onTo, onTransition, onTransitionComplete, onInit, onInitComplete, onInitEvents, onStartTimer, onClearTimer
-Added waitForTransition option
-If waitForTransition is false the behaviour for rapidly cycling through slides has improved by finishing the transitions immediatly
-Customize the pager, thumber and slideshow list elements. Use ul > li's or straight divs, whatever floats your boat.
+Uberbox is a light-weight, feature packed slideshow plugin built ontop of jquery, created and maintained by [Matt Froese](http://twitter.com/mattfroese)
+
+## Documentation
+
+### Simplest Example
+
+The goal of uberbox is to work out of the box. Just give uberbox an element containing list, and it can manage the rest.
+
+	<div id="slideshow">
+		<ul>
+			<li><img src="http://lorempixel.com/600/300/sports/Slide-1/" alt="" /></li>
+			<li><img src="http://lorempixel.com/600/300/sports/Slide-2/" alt="" /></li>
+		</ul>
+	</div>	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$( "#slideshow" ).uberbox({ height: "300px"	});
+	});
+	</script>
+
+#### What's with the height?
+
+Due to the acceptance of any content, uberbox currently requires that a height be passed, or set via CSS.
