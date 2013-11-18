@@ -1,3 +1,10 @@
+/*!
+ * Uberbox
+ * http://mattfroese.ca/
+ *
+ * Copyright (c) 2013 Matt Froese
+ * Licenced under GPL
+ */
 (function( $ ){
 
     var uberbox = function (element, options) {
@@ -21,7 +28,7 @@
             if( parseInt( options.width ) > 0 ) this.$element.css( "width", options.width );
             if( parseInt( options.height ) > 0 ) this.$element.css( "height", options.height );
 
-            options.width = this.$element[0].style.width; //because jquery converts it to pixels (we want to allow percentages as well)
+            options.width = this.$element[0].style.width == "" ? "100%" : this.$element[0].style.width; //because jquery converts it to pixels (we want to allow percentages as well)
             options.height = this.$element[0].style.height;
 
             this.$element.css( { "position": "relative",  "overflow": "hidden" } );
