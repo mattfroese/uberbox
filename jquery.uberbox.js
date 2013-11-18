@@ -60,6 +60,8 @@
             var options = this.options,
                 proxy = this;
 
+            this.options.onInit( this );
+            
             if( this.options.nextButton != "" )
                 $(this.options.nextButton).on( "click", function() { proxy.next(); });
 
@@ -84,8 +86,7 @@
             }
             if( this.options.thumber != "" && ($thumberElement = $(this.options.thumber)).length != 0) {
                 if( $thumberElement.find( this.options.thumberItemElement ).length == 0 ) {
-                    var thumberContent = "",
-                        i = 0;
+                    var thumberContent = "";
                     this.$container.find( this.options.slideElement ).each( function() {
                         thumberContent += "<"+proxy.options.thumberItemElement + ">"
                                             + ( $(this).data("thumb") != undefined && $(this).data("thumb") != "" ?
