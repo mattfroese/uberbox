@@ -18,14 +18,14 @@
 
             this.options.onSetup( this );
 
-            if( options.width > 0 ) this.$element.css( "width", options.width );
-            if( options.height > 0 ) this.$element.css( "height", options.height );
+            if( parseInt( options.width ) > 0 ) this.$element.css( "width", options.width );
+            if( parseInt( options.height ) > 0 ) this.$element.css( "height", options.height );
 
             options.width = this.$element[0].style.width; //because jquery converts it to pixels (we want to allow percentages as well)
             options.height = this.$element[0].style.height;
 
             this.$element.css( { "position": "relative",  "overflow": "hidden" } );
-            this.$container.css( { width: options.width, height: options.height } );
+            this.$container.css( { width: options.width, height: options.height, "margin": 0, "padding": 0, "list-style": "none" } );
 
             if( options.source.url != "" ) {
                 var j = $.ajax({
@@ -53,16 +53,14 @@
             var options = this.options,
                 proxy = this;
 
-            this.$container.find( this.options.slideElement + ":not(:first)" ).css( "display", "none" );
+            if( this.options.nextButton != "" )
+                $(this.options.nextButton).on( "click", function() { proxy.next(); });
 
-            if( this.options.nextButton != "" && ($nextButton = $(this.options.nextButton)).length != 0 )
-                $nextButton.live("click", function() { proxy.next(); });
+            if( this.options.previousButton != "" )
+                $(this.options.previousButton).on( "click", function() { proxy.previous(); });
 
-            if( this.options.previousButton != "" && ($previousButton = $(this.options.previousButton)).length != 0 )
-                $previousButton.live("click",function() { proxy.previous(); });
-
-            if( this.options.playPauseButton != "" && ($pauseToggleButton = $(this.options.playPauseButton)).length != 0 )
-                $pauseToggleButton.live("click",function() { proxy.playPause(); });
+            if( this.options.playPauseButton != "" )
+                $(this.options.playPauseButton).on( "click", function() { proxy.playPause(); });
 
             if( this.options.pager != "" && ($pagerElement = $(this.options.pager)).length != 0) {
                 if( $pagerElement.find( this.options.pagerItemElement ).length == 0 ) {
@@ -73,7 +71,7 @@
                     })
                     $pagerElement.append( pagerContent );
                 }
-                $pagerElement.find( this.options.pagerItemElement ).live( "click", function() {
+                $( this.options.pagerItemElement ).on( "click", function() {
                     proxy.to( $(this).parent().children().index(this)+1 );
                 });
             }
@@ -84,17 +82,25 @@
                     this.$container.find( this.options.slideElement ).each( function() {
                         thumberContent += "<"+proxy.options.thumberItemElement + ">"
                                             + ( $(this).data("thumb") != undefined && $(this).data("thumb") != "" ?
-                                                "<img src=\"" + $(this).data("thumb") + "\" alt=\"\" />":++i)
+                                                "<img src=\"" + $(this).data("thumb") + "\" alt=\"\" />":$(this).index()+1)
                                             + "</"+proxy.options.thumberItemElement + ">";
                     })
                     $thumberElement.append( thumberContent );
                 }
-                $thumberElement.find( this.options.thumberItemElement ).live( "click", function() {
+                $( this.options.thumberItemElement ).on( "click", function() {
                     proxy.to( $(this).parent().children().index(this)+1 );
                 });
             }
 
-            this._setActiveSlide(  this.$container.find( this.options.slideElement + ":" + (( this.options.startSlide > 0 ) ? "nth-child(" +this.options.startSlide + ")" : "first") ) );
+            var startSlide = 1;
+            if( this.options.startSlide == "random" ) {
+                startSlide = this._getRandomSlideNumber();
+            } else if( this.options.startSlide > 0 ) {
+                startSlide = this.options.startSlide;
+            }
+
+            this._setActiveSlide( this.$container.find( this.options.slideElement + ":" + (( startSlide > 0 ) ? "nth-child(" + startSlide + ")" : "first") ) );
+            this.$container.find( this.options.slideElement + ":not(.active)" ).css( "display", "none" );
             this._initEvents();
 
             if( this.options.auto ) {
@@ -133,6 +139,15 @@
                 $thumberElement.children(".active").removeClass("active");
                 $($thumberElement.children()[activeSlideIndex]).addClass("active");
             }
+        },
+        _getRandomSlideNumber: function() {
+            return Math.floor((Math.random() * this.$container.find( this.options.slideElement ).length )+1);
+        },
+        _getActiveSlide: function() {
+            return this.$container.find( this.options.slideElement + ".active" );
+        },
+        _getSlide: function( index ) {
+            return this.$container.find( this.options.slideElement + ":nth-child(" + index + ")");
         },
         _transition: function (next) {
             var proxy = this,
@@ -222,13 +237,35 @@
             this._transition( next );
         },
         next: function () {
-            var next = this.$container.find( this.options.slideElement + ".active" ).next();
+            var activeSlide = this._getActiveSlide();
+                activeIndex = activeSlide.index()+1;
+                next = null;
+            if( this.options.order == "random" ) {
+                newSlideIndex = this._getRandomSlideNumber();
+                while( activeIndex == newSlideIndex ) {
+                    newSlideIndex = this._getRandomSlideNumber();
+                }
+                next = this._getSlide( newSlideIndex );
+            } else {
+                next = activeSlide.next();
+            }
             if( next.length == 0 ) next = this.$container.find( this.options.slideElement + ":first" );
             this.options.onNext( this );
             this._transition( next );
         },
         previous: function () {
-            var previous = this.$container.find( this.options.slideElement + ".active" ).prev();
+            var activeSlide = this._getActiveSlide();
+                activeIndex = activeSlide.index()+1;
+                previous = null;
+            if( this.options.order == "random" ) {
+                newSlideIndex = this._getRandomSlideNumber();
+                while( activeIndex == newSlideIndex ) {
+                    newSlideIndex = this._getRandomSlideNumber();
+                }
+                previous = this._getSlide( newSlideIndex );
+            } else {
+                previous = activeSlide.prev();
+            }
             if( previous.length == 0 ) previous = this.$container.find( this.options.slideElement + ":last" );
             this.options.onPrevious( this );
             this._transition( previous );
@@ -268,6 +305,7 @@
         height: 0,
         startDelay: 0,
         startSlide: 0,
+        order: "sequence", // or random
         speed: 5000,
         transition: {
             fx: "fade",
@@ -286,7 +324,6 @@
         slideElement: "li",
         pagerItemElement: "li",
         thumberItemElement: "li",
-        slices: 15,
         source: {
             url: ""
         },
