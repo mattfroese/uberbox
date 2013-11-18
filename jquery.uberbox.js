@@ -8,7 +8,7 @@
 (function( $ ){
 
     var uberbox = function (element, options) {
-        this.version = "1.3rc1";
+        this.version = "1.4";
         this.options = options;
         this.$element = $(element);
         this.$container = $(this.$element.find( this.options.containerElement )[0]);

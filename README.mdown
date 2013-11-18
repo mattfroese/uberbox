@@ -26,6 +26,7 @@ Due to the acceptance of any content, uberbox currently requires that a height b
 
 ### Options
 
+- **auto** (bool): Auto-advance, or manual
 - **width**: Give uberbox a width in px or %
 - **height**: Give uberbox a width in px or %
 - **startDelay** (ms): Add a start delay to your slideshow
@@ -46,7 +47,6 @@ Due to the acceptance of any content, uberbox currently requires that a height b
 - **playPauseButton**: Give an element to use as a play/pause button
 - **pager**: Give a list element to use as a pager
 - **thumber**: Give a list element to display thumbnails. You can specify thumbnails by adding data-thumb to each slide li
-- **auto** (bool): Auto-advance, or manual
 - **pauseOnHover** (bool): Uberbox will pause when you hover a slide
 - **containerElement** (Default ul): Change the container element uberbox will look for
 - **slideElement** (Default li): Change the item element for each slide item
