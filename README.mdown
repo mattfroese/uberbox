@@ -74,35 +74,35 @@ Will be triggerd when uberbox is switched to a specific slide.
 #### onNext( uberbox )
 When the next slide is triggered.
 
-### onPrevious( uberbox )
+#### onPrevious( uberbox )
 When the next previous slide is triggered.
 
-### onTransition( uberbox, activeSlide, nextSlide )
+#### onTransition( uberbox, activeSlide, nextSlide )
 When the next slide is triggered
 
-### onTransitionComplete( uberbox, activeSlide )
+#### onTransitionComplete( uberbox, activeSlide )
 When current transition has completed
 
-### onPlay( uberbox )
+#### onPlay( uberbox )
 Called when play is triggered
 
-### onPause( uberbox )
+#### onPause( uberbox )
 Called when pause is triggered
 
-### onSetup( uberbox )
+#### onSetup( uberbox )
 Before setup of uberbox has started. This is before any css gets applied, or the source is loaded.
 
-### onInit( uberbox )
+#### onInit( uberbox )
 Just before initalization. Intilization will setup the pager, thumber and set the first slide.
 
-### onInitComplete( uberbox )
+#### onInitComplete( uberbox )
 After initialization.
 
-### onInitEvents( uberbox )
+#### onInitEvents( uberbox )
 After pause on hover has been set.
 
-### onStartTimer( uberbox )
+#### onStartTimer( uberbox )
 When the transition timer gets set, happens every slide transition or when pausing/playing.
 
-### onClearTimer( uberbox ) 
+#### onClearTimer( uberbox ) 
 When the transition timer gets set, happens every slide transition or when pausing/playing.
