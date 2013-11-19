@@ -132,3 +132,7 @@ When the transition timer gets set, happens every slide transition or when pausi
 
 #### onClearTimer( uberbox ) 
 When the transition timer gets set, happens every slide transition or when pausing/playing.
+
+## Special Thanks
+
+Special thanks to Bryan Paterson for contributing to this project.
