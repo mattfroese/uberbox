@@ -8,7 +8,7 @@
 (function( $ ){
 
     var uberbox = function (element, options) {
-        this.version = "1.4";
+        this.version = "2alpha";
         this.options = options;
         this.$element = $(element);
         this.$container = $(this.$element.find( this.options.containerElement )[0]);
@@ -153,7 +153,7 @@
                 },
                 touchend: function( e ) { 
                     proxy.play();
-                    if( Math.abs(proxy.touch.delta.x) > proxy.options.touchTransitionDelta ) {
+                    if( (Math.abs(proxy.touch.delta.x)/proxy.$element.width()) > proxy.options.touchTransitionDelta  ) {
                         if( proxy.touch.delta.x < 0 ) {
                             proxy.next();
                         } else {
@@ -381,7 +381,7 @@
         source: {
             url: ""
         },
-        touchTransitionDelta: 300,
+        touchTransitionDelta: 0.4, // percentage of total slide
         onTo: function( uberbox ) {},
         onNext: function( uberbox ) {},
         onPrevious: function( uberbox ) {},
