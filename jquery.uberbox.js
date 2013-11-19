@@ -133,11 +133,6 @@
                 if (proxy.options.pauseOnHover) proxy.play();
             });
 
-            // start touch events
-            $("#touchstart").html("Touchstart");
-            $("#touchend").html("Touchend");
-            $("#touchmove").html("touchmove");
-
             this.$element.on({ 
                 touchstart: function( e ) { 
                     proxy.pause();
