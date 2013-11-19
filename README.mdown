@@ -57,7 +57,7 @@ Due to the acceptance of any content, uberbox currently requires that a height b
 		url: "/path/to/json"
 	}
 - **source.url**: The url to use for fetching data
-- **touchTransitionDelta** (Default 300): The amount in pixels your finger needs to move before a slide transition is triggered.
+- **touchTransitionDelta** (Default 0.4): The percentage of distance the finger has to travel relative to the slide width to trigger the transition.
 
 ### Methods
 
