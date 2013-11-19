@@ -14,6 +14,7 @@
         this.$container = $(this.$element.find( this.options.containerElement )[0]);
         this.animating = false;
         this.paused = true;
+        this.touch = { start: {x:0,y:0}, move: {x:0,y:0}, delta: {x:0,y:0} };
         if( this.$container == undefined ) $.error( "container '" + this.options.containerElement + "' not found within uberbox, check options.containerElement for incorrect targeting" );
         this._setup();
     }
@@ -61,15 +62,6 @@
                 proxy = this;
 
             this.options.onInit( this );
-            
-            if( this.options.nextButton != "" )
-                $(this.options.nextButton).on( "click", function() { proxy.next(); });
-
-            if( this.options.previousButton != "" )
-                $(this.options.previousButton).on( "click", function() { proxy.previous(); });
-
-            if( this.options.playPauseButton != "" )
-                $(this.options.playPauseButton).on( "click", function() { proxy.playPause(); });
 
             if( this.options.pager != "" && ($pagerElement = $(this.options.pager)).length != 0) {
                 if( $pagerElement.find( this.options.pagerItemElement ).length == 0 ) {
@@ -80,9 +72,6 @@
                     })
                     $pagerElement.append( pagerContent );
                 }
-                $( this.options.pagerItemElement ).on( "click", function() {
-                    proxy.to( $(this).parent().children().index(this)+1 );
-                });
             }
             if( this.options.thumber != "" && ($thumberElement = $(this.options.thumber)).length != 0) {
                 if( $thumberElement.find( this.options.thumberItemElement ).length == 0 ) {
@@ -95,9 +84,6 @@
                     })
                     $thumberElement.append( thumberContent );
                 }
-                $( this.options.thumberItemElement ).on( "click", function() {
-                    proxy.to( $(this).parent().children().index(this)+1 );
-                });
             }
 
             var startSlide = 1;
@@ -120,11 +106,71 @@
         },
         _initEvents: function() {
             var proxy = this;
+            
+            if( this.options.nextButton != "" )
+                $(this.options.nextButton).on( "click", function() { proxy.next(); });
+
+            if( this.options.previousButton != "" )
+                $(this.options.previousButton).on( "click", function() { proxy.previous(); });
+
+            if( this.options.playPauseButton != "" )
+                $(this.options.playPauseButton).on( "click", function() { proxy.playPause(); });
+
+            if( this.options.pager != "" && ($pagerElement = $(this.options.pager)).length != 0) {
+                $( this.options.pagerItemElement ).on( "click", function() {
+                    proxy.to( $(this).parent().children().index(this)+1 );
+                });
+            }
+            if( this.options.thumber != "" && ($thumberElement = $(this.options.thumber)).length != 0) {
+                $( this.options.thumberItemElement ).on( "click", function() {
+                    proxy.to( $(this).parent().children().index(this)+1 );
+                });
+            }
+
             this.$element.mouseenter(function(){
                 if (proxy.options.pauseOnHover) proxy.pause();
             }).mouseleave(function(){
                 if (proxy.options.pauseOnHover) proxy.play();
             });
+
+            // start touch events
+            $("#touchstart").html("Touchstart");
+            $("#touchend").html("Touchend");
+            $("#touchmove").html("touchmove");
+
+            this.$element.on({ 
+                touchstart: function( e ) { 
+                    proxy.pause();
+                    var touch = e.originalEvent.touches[0];
+                    proxy.touch.start.x = touch.pageX;
+                    proxy.touch.start.y = touch.pageY;
+                    proxy.options.onTouchStart( proxy );
+                    e.preventDefault();
+                },
+                touchmove: function( e ) { 
+                    var touch = event.changedTouches[0];
+                    proxy.touch.move.x = touch.clientX;
+                    proxy.touch.move.y = touch.clientY;
+                    proxy.touch.delta.x = proxy.touch.move.x - proxy.touch.start.x;
+                    proxy.touch.delta.y = proxy.touch.move.y - proxy.touch.start.y;
+                    proxy.options.onTouchMove( proxy );
+                    e.preventDefault();
+                },
+                touchend: function( e ) { 
+                    proxy.play();
+                    if( Math.abs(proxy.touch.delta.x) > proxy.options.touchTransitionDelta ) {
+                        if( proxy.touch.delta.x < 0 ) {
+                            proxy.next();
+                        } else {
+                            proxy.previous();
+                        }
+                    }
+                    proxy.touch.start.x = proxy.touch.start.y = proxy.touch.move.x = proxy.touch.move.y = proxy.touch.delta.x = proxy.touch.delta.y = 0;
+                    proxy.options.onTouchEnd( proxy );
+                    e.preventDefault();
+                } 
+            });
+
             this.options.onInitEvents( this );
         },
         _startTimer: function( includeStartDelay ) {
@@ -157,7 +203,7 @@
         _getSlide: function( index ) {
             return this.$container.find( this.options.slideElement + ":nth-child(" + index + ")");
         },
-        _transition: function (next) {
+        _transition: function (next, isNext) {
             var proxy = this,
                 active = this.$container.find( this.options.slideElement + ".active" );
             if( next.is( active ) ) return false;
@@ -189,7 +235,10 @@
             } else if( transition.fx == "slide" ) {
                 active.css( { position: "absolute", top: 0, left: 0, width: this.options.width, height: this.options.height } );
                 var nextCss = { position: "absolute", display: "block", left: 0, top: 0, width: this.options.width, height: this.options.height };
-                switch( transition.direction ) {
+
+                var direction = transition.direction == "leftright" ? ( (isNext) ? "left" : "right" ) : transition.direction;
+
+                switch( direction ) {
                     case 'right':
                         next.css( $.extend( nextCss, { left: "-" + this.options.width }  ) );
                         active.animate( { left: this.options.width }, transition.speed );
@@ -214,7 +263,10 @@
             } else if( transition.fx == "wipe" ) {
                 next.css( { "z-index": 1, position: "absolute", width: this.options.width, height: this.options.height, top: 0, left: 0, display: "block", opacity: 1 } );
                 active.css( { "z-index": 2, position: "absolute", width: this.options.width, height: this.options.height, overflow: "hidden", top: 0, left: 0, display: "block", opacity: 1 } );
-                switch( transition.direction ) {
+
+                var direction = transition.direction == "leftright" ? ( (isNext) ? "left" : "right" ) : transition.direction;
+
+                switch( direction ) {
                     case 'right':
                         active.animate( { marginLeft: this.options.width, width: 0 }, transition.speed, function(){ $(this).css({ marginLeft: 0, width: 0, display: "none" }); proxy._transitionComplete(); } );
                         break;
@@ -259,7 +311,7 @@
             }
             if( next.length == 0 ) next = this.$container.find( this.options.slideElement + ":first" );
             this.options.onNext( this );
-            this._transition( next );
+            this._transition( next, true );
         },
         previous: function () {
             var activeSlide = this._getActiveSlide();
@@ -276,7 +328,7 @@
             }
             if( previous.length == 0 ) previous = this.$container.find( this.options.slideElement + ":last" );
             this.options.onPrevious( this );
-            this._transition( previous );
+            this._transition( previous, false );
         },
         pause: function() {
             this.paused = true;
@@ -334,6 +386,7 @@
         source: {
             url: ""
         },
+        touchTransitionDelta: 300,
         onTo: function( uberbox ) {},
         onNext: function( uberbox ) {},
         onPrevious: function( uberbox ) {},
@@ -346,7 +399,10 @@
         onInitComplete: function( uberbox ) {},
         onInitEvents: function( uberbox ) {},
         onStartTimer: function( uberbox ) {},
-        onClearTimer: function( uberbox ) {}
+        onClearTimer: function( uberbox ) {},
+        onTouchStart: function( uberbox ) {},
+        onTouchMove: function( uberbox ) {},
+        onTouchEnd: function( uberbox ) {}
     };
 
 })( jQuery );
