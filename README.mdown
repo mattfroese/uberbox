@@ -60,6 +60,32 @@ Due to the acceptance of any content, uberbox currently requires that a height b
 
 ### Methods
 
+Methods are called by passing the method name to uberbox. Example:
+
+	$("#slideshow").uberbox("next");
+
+#### next
+Trigger next slide
+
+#### previous
+Trigger previous slide
+
+#### to
+Trigger a specific slide by passing in the slide number:
+
+	$("#slideshow").uberbox("to", 2);
+
+#### play
+Start playing
+
+#### pause
+Pause uberbox slide transitions
+
+#### playPause
+toggle slide transitions
+
+### Events
+
 Pass any of these along with initialization to attach custom code to each method. Example:
 
 	$( "#slideshow" ).uberbox({ 
