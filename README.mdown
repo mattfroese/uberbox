@@ -79,10 +79,10 @@ Trigger a specific slide by passing in the slide number:
 Start playing
 
 #### pause
-Pause uberbox slide transitions
+Pause slide transitions
 
 #### playPause
-toggle slide transitions
+Toggle slide transitions
 
 ### Events
 
