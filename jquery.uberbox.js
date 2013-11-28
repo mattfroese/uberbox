@@ -117,12 +117,12 @@
                 $(this.options.playPauseButton).on( "click", function() { proxy.playPause(); });
 
             if( this.options.pager != "" && ($pagerElement = $(this.options.pager)).length != 0) {
-                $( this.options.pagerItemElement ).on( "click", function() {
+                $pagerElement.on( "click", this.options.pagerItemElement, function() {
                     proxy.to( $(this).parent().children().index(this)+1 );
                 });
             }
             if( this.options.thumber != "" && ($thumberElement = $(this.options.thumber)).length != 0) {
-                $( this.options.thumberItemElement ).on( "click", function() {
+                $thumberElement.on( "click", this.options.thumberItemElement, function() {
                     proxy.to( $(this).parent().children().index(this)+1 );
                 });
             }
