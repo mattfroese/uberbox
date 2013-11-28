@@ -1,6 +1,7 @@
 /*!
  * Uberbox
  * http://mattfroese.ca/
+ * Version 1.4
  *
  * Copyright (c) 2013 Matt Froese
  * Licenced under GPL
@@ -8,7 +9,7 @@
 (function( $ ){
 
     var uberbox = function (element, options) {
-        this.version = "2alpha";
+        this.version = "1.4";
         this.options = options;
         this.$element = $(element);
         this.$container = $(this.$element.find( this.options.containerElement )[0]);
